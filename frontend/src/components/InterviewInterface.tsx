@@ -22,6 +22,7 @@ const InterviewInterface: React.FC<InterviewInterfaceProps> = ({ interviewId, on
 
     useEffect(() => {
         console.log('[InterviewInterface] Initializing WebSocket for interview:', interviewId);
+        const wsUrl = getWebSocketUrl(`/ws/interview/${interviewId}`);
         console.log('[InterviewInterface] WebSocket URL:', wsUrl);
         console.log('[InterviewInterface] Current location:', window.location.href);
         
