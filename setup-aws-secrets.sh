@@ -33,3 +33,7 @@ aws secretsmanager create-secret \
 echo "Secrets created! Update the secret values with:"
 echo "aws secretsmanager update-secret --secret-id ${SECRET_NAME}/openai-api-key --secret-string 'YOUR_ACTUAL_KEY' --region $REGION"
 
+
+
+
+

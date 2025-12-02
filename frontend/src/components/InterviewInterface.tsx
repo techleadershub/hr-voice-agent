@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Mic, MicOff, Volume2, MessageSquare } from 'lucide-react';
+import { Mic, MicOff, MessageSquare } from 'lucide-react';
+import { getWebSocketUrl } from '../config/api';
 
 interface InterviewInterfaceProps {
     interviewId: string;
@@ -21,7 +22,10 @@ const InterviewInterface: React.FC<InterviewInterfaceProps> = ({ interviewId, on
 
     useEffect(() => {
         console.log('[InterviewInterface] Initializing WebSocket for interview:', interviewId);
-        const ws = new WebSocket(`ws://localhost:8000/ws/interview/${interviewId}`);
+        console.log('[InterviewInterface] WebSocket URL:', wsUrl);
+        console.log('[InterviewInterface] Current location:', window.location.href);
+        
+        const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
 
         ws.onopen = () => {

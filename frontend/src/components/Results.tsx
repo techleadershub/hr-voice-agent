@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { CheckCircle, AlertTriangle, Star, BookOpen } from 'lucide-react';
+import { AlertTriangle, Star, BookOpen } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 
 interface ResultsProps {
     interviewId: string;
@@ -16,12 +17,12 @@ const Results: React.FC<ResultsProps> = ({ interviewId }) => {
             try {
                 // Trigger evaluation first
                 console.log('[Results] Triggering evaluation...');
-                await axios.post(`http://localhost:8000/interview/${interviewId}/evaluate`);
+                await axios.post(getApiUrl(`/interview/${interviewId}/evaluate`));
                 console.log('[Results] Evaluation triggered successfully');
                 
                 // Then fetch full data
                 console.log('[Results] Fetching interview data...');
-                const response = await axios.get(`http://localhost:8000/interview/${interviewId}`);
+                const response = await axios.get(getApiUrl(`/interview/${interviewId}`));
                 console.log('[Results] Data received:', {
                     hasData: !!response.data,
                     matchScore: response.data?.match_score,

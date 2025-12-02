@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Upload, FileText, User, Briefcase } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 
 interface ResumeUploadProps {
   onUploadSuccess: (data: any) => void;
@@ -36,7 +37,7 @@ const ResumeUpload: React.FC<ResumeUploadProps> = ({ onUploadSuccess }) => {
 
     try {
       console.log('[ResumeUpload] Sending POST request to /upload_resume');
-      const response = await axios.post('http://localhost:8000/upload_resume', formData, {
+      const response = await axios.post(getApiUrl('/upload_resume'), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
