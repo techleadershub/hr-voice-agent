@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script to set up AWS Secrets Manager for hr-voice-agent
 
-REGION="us-east-1"  # Change to your region
+REGION="us-south-1"  # Change to your region
 SECRET_NAME="hr-voice-agent"
 
 echo "Setting up AWS Secrets Manager for hr-voice-agent..."

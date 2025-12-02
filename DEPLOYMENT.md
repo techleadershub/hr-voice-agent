@@ -37,13 +37,13 @@ docker run -p 8000:8000 \
 
 ```bash
 # Login to ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account-id>.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region us-south-1 | docker login --username AWS --password-stdin <account-id>.dkr.ecr.us-south-1.amazonaws.com
 
 # Tag image
-docker tag hr-voice-agent:latest <account-id>.dkr.ecr.us-east-1.amazonaws.com/hr-voice-agent:latest
+docker tag hr-voice-agent:latest <account-id>.dkr.ecr.us-south-1.amazonaws.com/hr-voice-agent:latest
 
 # Push
-docker push <account-id>.dkr.ecr.us-east-1.amazonaws.com/hr-voice-agent:latest
+docker push <account-id>.dkr.ecr.us-south-1.amazonaws.com/hr-voice-agent:latest
 ```
 
 ### 4. Deploy to ECS/Fargate
@@ -60,13 +60,13 @@ aws secretsmanager create-secret \
   --name "hr-voice-agent/openai-api-key" \
   --description "OpenAI API Key" \
   --secret-string "sk-your-actual-key-here" \
-  --region us-east-1
+  --region us-south-1
 
 # Update secret value (if already exists)
 aws secretsmanager update-secret \
   --secret-id "hr-voice-agent/openai-api-key" \
   --secret-string "sk-your-actual-key-here" \
-  --region us-east-1
+  --region us-south-1
 ```
 
 Or use the provided script:
@@ -104,7 +104,7 @@ Register the task definition:
 ```bash
 aws ecs register-task-definition \
   --cli-input-json file://aws-task-definition.json.example \
-  --region us-east-1
+  --region us-south-1
 ```
 
 #### Step 3: Create ECS Service
@@ -152,7 +152,7 @@ aws ecs register-task-definition \
     "secrets": [
       {
         "name": "OPENAI_API_KEY",
-        "valueFrom": "arn:aws:secretsmanager:us-east-1:123456789:secret:hr-voice-agent/openai-api-key"
+        "valueFrom": "arn:aws:secretsmanager:us-south-1:123456789:secret:hr-voice-agent/openai-api-key"
       }
     ]
   }]
