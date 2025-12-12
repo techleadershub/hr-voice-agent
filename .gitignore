@@ -57,8 +57,8 @@ dist-ssr/
 *.db
 *.sqlite
 *.sqlite3
-data/interviews.db
-data/*.db
+data/
+!data/.gitkeep
 
 # IDE
 .vscode/
