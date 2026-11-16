@@ -5,6 +5,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 import uuid
 
+from ..services.guardrails import filter_biased_questions
+
 class Question(BaseModel):
     id: str = Field(description="Unique identifier for the question.")
     text: str = Field(description="The question text.")
@@ -69,7 +71,11 @@ class QuestionAgent:
             "gap_analysis": str(gap_analysis),
             "format_instructions": parser.get_format_instructions()
         })
-        
+
+        # Drop any illegal/discriminatory questions before counting; fallbacks
+        # below will fill in if we're now short on technical/behavioral.
+        result.questions, _dropped = filter_biased_questions(result.questions)
+
         # Filter and select questions
         technical_questions = [q for q in result.questions if q.type.lower() in ['technical', 'tech']][:2]
         behavioral_questions = [q for q in result.questions if q.type.lower() in ['behavioral', 'behavioural']][:1]

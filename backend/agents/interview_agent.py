@@ -5,7 +5,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 class InterviewAgent:
     def __init__(self):
-        self.llm = ChatOpenAI(model="gpt-4o", temperature=0.7)
+        self.llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
     def generate_response(self, transcript: List[Dict[str, str]], current_question: str) -> str:
         """Generate a conversational response to the candidate's answer."""

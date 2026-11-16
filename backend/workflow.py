@@ -5,6 +5,7 @@ from .agents.gap_analysis_agent import gap_analysis_agent
 from .agents.question_agent import question_agent, Question
 from .agents.evaluation_agent import evaluation_agent, Evaluation
 from .services.database_service import database_service
+from .services.guardrails import validate_evaluation
 
 class InterviewState(TypedDict):
     interview_id: str
@@ -74,13 +75,16 @@ def generate_questions_node(state: InterviewState):
 def evaluate_interview_node(state: InterviewState):
     print(f"Evaluating interview {state['interview_id']}")
     result = evaluation_agent.evaluate_interview(state['job_description'], state['transcript'])
-    
+
+    # Hard-fail on out-of-schema output (coerced scores, unknown recommendation)
+    validate_evaluation(result)
+
     # Update DB
     database_service.complete_interview(
         int(state['interview_id']),
         result.model_dump()
     )
-    
+
     return {"evaluation": result}
 
 # Define the graph

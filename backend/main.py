@@ -24,8 +24,34 @@ load_dotenv()
 
 from .services.database_service import database_service
 from .services.voice_service import voice_service
+from .services.resume_parser import parse_resume
+from .services.guardrails import (
+    GuardrailError,
+    MAX_CANDIDATE_NAME,
+    MAX_JOB_DESCRIPTION,
+    MAX_RESUME_TEXT,
+    sanitize_user_text,
+)
 from .workflow import app_workflow, evaluate_interview_node
 from .agents.interview_agent import interview_agent
+
+MAX_RESUME_BYTES = 10 * 1024 * 1024  # 10 MB
+
+async def _read_capped(file: UploadFile, max_bytes: int) -> bytes:
+    chunks: list[bytes] = []
+    total = 0
+    while True:
+        chunk = await file.read(64 * 1024)
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > max_bytes:
+            raise HTTPException(
+                status_code=413,
+                detail=f"Resume exceeds {max_bytes // (1024 * 1024)} MB limit",
+            )
+        chunks.append(chunk)
+    return b"".join(chunks)
 
 app = FastAPI(title="Smart HR Recruiter Agent")
 
@@ -67,17 +93,46 @@ async def upload_resume(
     logger.info(f"  File: {file.filename}, Size: {file.size if hasattr(file, 'size') else 'unknown'}")
     logger.info(f"  Job description length: {len(job_description)} chars")
     
-    content = await file.read()
-    logger.info(f"  File content read: {len(content)} bytes")
-    
-    # Simple text extraction for MVP (assuming .txt or simple parsing)
-    # For PDF/Docx, we would need pypdf or python-docx
+    content = b""
     try:
-        resume_text = content.decode("utf-8")
-        logger.info(f"  Resume text decoded successfully: {len(resume_text)} chars")
-    except UnicodeDecodeError as e:
-        logger.warning(f"  Unicode decode error, using fallback: {e}")
-        resume_text = str(content) # Very basic fallback
+        # Validate text fields first — cheap, lets us reject before any I/O
+        try:
+            candidate_name = sanitize_user_text(
+                candidate_name, MAX_CANDIDATE_NAME, field="candidate_name"
+            )
+            job_description = sanitize_user_text(
+                job_description, MAX_JOB_DESCRIPTION, field="job_description"
+            )
+        except GuardrailError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+        content = await _read_capped(file, MAX_RESUME_BYTES)
+        logger.info(f"  File content read: {len(content)} bytes")
+
+        try:
+            resume_text = await asyncio.to_thread(
+                parse_resume, content, file.filename, file.content_type
+            )
+            resume_text = sanitize_user_text(
+                resume_text, MAX_RESUME_TEXT, field="resume_text"
+            )
+        except GuardrailError as e:
+            logger.error(f"  Resume guardrail failed: {e}")
+            raise HTTPException(status_code=400, detail=str(e))
+        except ValueError as e:
+            logger.error(f"  Resume parsing failed: {e}")
+            raise HTTPException(status_code=400, detail=str(e))
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"  Unexpected error parsing resume: {e}", exc_info=True)
+            raise HTTPException(status_code=400, detail=f"Failed to parse resume: {e}")
+    finally:
+        # Drop the upload's spooled temp file (and in-memory bytes) right away
+        # so nothing accumulates on disk while the rest of the workflow runs.
+        await file.close()
+        content = b""
+        logger.info("  Upload buffer released")
 
     # Create interview record
     try:
@@ -102,10 +157,10 @@ async def upload_resume(
         "evaluation": None
     }
     
-    # Run the graph with error handling
+    # Run the graph with error handling (off the event loop — sync OpenAI calls)
     try:
         logger.info("  Starting workflow execution...")
-        result = app_workflow.invoke(initial_state)
+        result = await asyncio.to_thread(app_workflow.invoke, initial_state)
         logger.info(f"  Workflow completed successfully")
         logger.info(f"  Match score: {result.get('match_score')}")
         logger.info(f"  Questions generated: {len(result.get('questions', []))}")
@@ -158,7 +213,12 @@ async def get_interview(interview_id: int):
             logger.info(f"  Evaluation parsed successfully")
     except (json.JSONDecodeError, TypeError) as e:
         logger.warning(f"  Failed to parse JSON fields for interview {interview_id}: {e}")
-    
+
+    interview['gap_analysis'] = {
+        "missing_skills": interview.get('missing_skills') or [],
+        "experience_gap": interview.get('experience_gap'),
+    }
+
     logger.info(f"  Returning interview data")
     return interview
 
@@ -315,7 +375,7 @@ async def evaluate_interview(interview_id: int):
     
     try:
         logger.info("  Starting evaluation...")
-        result = evaluate_interview_node(state)
+        result = await asyncio.to_thread(evaluate_interview_node, state)
         evaluation = result.get('evaluation')
         
         # evaluation is a Pydantic model, not a dict - access attributes directly

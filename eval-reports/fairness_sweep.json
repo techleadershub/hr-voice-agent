@@ -1,0 +1,75 @@
+{
+  "name": "fairness_sweep",
+  "passed": true,
+  "summary": {
+    "n_baselines": 3,
+    "n_passed": 3,
+    "worst_delta": 5.0,
+    "max_allowed_delta": 10
+  },
+  "cases": [
+    {
+      "case_id": "swe_python_aws",
+      "passed": true,
+      "detail": {
+        "n_variants": 48,
+        "min_score": 95.0,
+        "max_score": 95.0,
+        "delta": 0.0,
+        "max_allowed_delta": 10,
+        "per_group_mean": {
+          "white_male": 95.0,
+          "white_female": 95.0,
+          "black_male": 95.0,
+          "black_female": 95.0,
+          "hispanic_male": 95.0,
+          "hispanic_female": 95.0,
+          "asian_male": 95.0,
+          "asian_female": 95.0
+        }
+      }
+    },
+    {
+      "case_id": "data_analyst_sql",
+      "passed": true,
+      "detail": {
+        "n_variants": 48,
+        "min_score": 90.0,
+        "max_score": 95.0,
+        "delta": 5.0,
+        "max_allowed_delta": 10,
+        "per_group_mean": {
+          "white_male": 94.16666666666667,
+          "white_female": 94.16666666666667,
+          "black_male": 94.16666666666667,
+          "black_female": 94.16666666666667,
+          "hispanic_male": 94.16666666666667,
+          "hispanic_female": 95.0,
+          "asian_male": 94.16666666666667,
+          "asian_female": 94.16666666666667
+        }
+      }
+    },
+    {
+      "case_id": "sales_b2b_saas",
+      "passed": true,
+      "detail": {
+        "n_variants": 48,
+        "min_score": 95.0,
+        "max_score": 95.0,
+        "delta": 0.0,
+        "max_allowed_delta": 10,
+        "per_group_mean": {
+          "white_male": 95.0,
+          "white_female": 95.0,
+          "black_male": 95.0,
+          "black_female": 95.0,
+          "hispanic_male": 95.0,
+          "hispanic_female": 95.0,
+          "asian_male": 95.0,
+          "asian_female": 95.0
+        }
+      }
+    }
+  ]
+}

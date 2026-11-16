@@ -1,0 +1,70 @@
+{
+  "_about": "Hand-labeled (resume, JD) pairs with a recruiter-style fit bucket. Used to test that the matching agent ranks pairs in roughly the right order and emits scores within the band for each bucket. Scale this up by ingesting HuggingFace 'cnamuangtoun/resume-job-description-fit' (≈4k pairs, labels: Good Fit / Potential Fit / No Fit).",
+  "bands": {
+    "strong": {"min": 65, "max": 100},
+    "partial": {"min": 35, "max": 75},
+    "poor": {"min": 0, "max": 40}
+  },
+  "pairs": [
+    {
+      "id": "swe_match_1",
+      "label": "strong",
+      "job_description": "Senior Backend Engineer. 5+ years Python, FastAPI, AWS, PostgreSQL.",
+      "resume": "Sam Lee. Senior Backend Engineer, 7 years. Python, FastAPI, AWS (ECS/RDS), PostgreSQL. Built APIs handling 30M req/day."
+    },
+    {
+      "id": "swe_match_2",
+      "label": "strong",
+      "job_description": "Data Engineer. Spark, Airflow, Snowflake, 4+ years.",
+      "resume": "Priya Patel. Data Engineer, 5 years. Daily PySpark jobs on EMR, Airflow DAGs, Snowflake modeling, dbt."
+    },
+    {
+      "id": "ml_match_strong",
+      "label": "strong",
+      "job_description": "Machine Learning Engineer. PyTorch, model serving, MLOps, 3+ years.",
+      "resume": "Alex Kim. ML Engineer, 4 years. PyTorch training pipelines, TorchServe deployments, MLflow tracking, Kubernetes."
+    },
+    {
+      "id": "pm_match_strong",
+      "label": "strong",
+      "job_description": "Product Manager, fintech. 4+ years PM, payments domain, Jira, customer interviews.",
+      "resume": "Dana Wright. Senior PM, 6 years at fintechs. Owned roadmap for payments rail, ran 30+ customer interviews per quarter, Jira."
+    },
+    {
+      "id": "swe_partial_1",
+      "label": "partial",
+      "job_description": "Senior Backend Engineer. 5+ years Python, FastAPI, AWS, PostgreSQL.",
+      "resume": "Riley Cho. Engineer, 3 years. Python, Flask, GCP. Some PostgreSQL exposure."
+    },
+    {
+      "id": "data_partial",
+      "label": "partial",
+      "job_description": "Data Analyst. 3+ years SQL, Tableau, A/B testing.",
+      "resume": "Morgan Hill. Analyst, 2 years. SQL daily, Power BI, one A/B test."
+    },
+    {
+      "id": "frontend_partial",
+      "label": "partial",
+      "job_description": "Senior Frontend Engineer. React, TypeScript, 5+ years, design-system experience.",
+      "resume": "Taylor Singh. Frontend Engineer, 3 years. React, JavaScript (some TS), built one component library."
+    },
+    {
+      "id": "swe_poor_1",
+      "label": "poor",
+      "job_description": "Senior Backend Engineer. 5+ years Python, FastAPI, AWS, PostgreSQL.",
+      "resume": "Casey Brown. Marketing coordinator, 4 years. Email campaigns, light HTML."
+    },
+    {
+      "id": "data_poor",
+      "label": "poor",
+      "job_description": "Data Analyst. 3+ years SQL, Tableau, A/B testing.",
+      "resume": "Jordan Diaz. Recent grad, BA History. Internship in event planning."
+    },
+    {
+      "id": "ml_poor",
+      "label": "poor",
+      "job_description": "Machine Learning Engineer. PyTorch, model serving, MLOps, 3+ years.",
+      "resume": "Robin Stone. Sales rep, 5 years SaaS. No coding experience."
+    }
+  ]
+}

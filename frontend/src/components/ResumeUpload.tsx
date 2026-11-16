@@ -107,7 +107,7 @@ const ResumeUpload: React.FC<ResumeUploadProps> = ({ onUploadSuccess }) => {
               }}
               className="hidden"
               id="resume-upload"
-              accept=".txt,.pdf,.docx"
+              accept=".txt,.pdf,application/pdf,text/plain"
             />
             <label htmlFor="resume-upload" className="cursor-pointer">
               {file ? (

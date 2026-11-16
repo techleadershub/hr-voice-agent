@@ -1,6 +1,6 @@
 import os
 from typing import List
-from sentence_transformers import SentenceTransformer
+
 
 class EmbeddingService:
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
@@ -9,6 +9,10 @@ class EmbeddingService:
 
     def _get_model(self):
         if self.model is None:
+            # Lazy import: sentence-transformers pulls torch (~1GB).
+            # Keeping it out of module-load lets eval/test paths import
+            # downstream agents without the heavy dep.
+            from sentence_transformers import SentenceTransformer
             self.model = SentenceTransformer(self.model_name)
         return self.model
 

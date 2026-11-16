@@ -1,0 +1,143 @@
+{
+  "name": "match_calibration",
+  "passed": true,
+  "summary": {
+    "n_pairs": 10,
+    "n_in_band": 10,
+    "spearman_rho": 0.9585144756340406,
+    "spearman_target": 0.6,
+    "correlation_ok": true
+  },
+  "cases": [
+    {
+      "case_id": "swe_match_1",
+      "passed": true,
+      "detail": {
+        "label": "strong",
+        "score": 100.0,
+        "band": {
+          "min": 65,
+          "max": 100
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "swe_match_2",
+      "passed": true,
+      "detail": {
+        "label": "strong",
+        "score": 95.0,
+        "band": {
+          "min": 65,
+          "max": 100
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "ml_match_strong",
+      "passed": true,
+      "detail": {
+        "label": "strong",
+        "score": 90.0,
+        "band": {
+          "min": 65,
+          "max": 100
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "pm_match_strong",
+      "passed": true,
+      "detail": {
+        "label": "strong",
+        "score": 95.0,
+        "band": {
+          "min": 65,
+          "max": 100
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "swe_partial_1",
+      "passed": true,
+      "detail": {
+        "label": "partial",
+        "score": 40.0,
+        "band": {
+          "min": 35,
+          "max": 75
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "data_partial",
+      "passed": true,
+      "detail": {
+        "label": "partial",
+        "score": 50.0,
+        "band": {
+          "min": 35,
+          "max": 75
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "frontend_partial",
+      "passed": true,
+      "detail": {
+        "label": "partial",
+        "score": 60.0,
+        "band": {
+          "min": 35,
+          "max": 75
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "swe_poor_1",
+      "passed": true,
+      "detail": {
+        "label": "poor",
+        "score": 0.0,
+        "band": {
+          "min": 0,
+          "max": 40
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "data_poor",
+      "passed": true,
+      "detail": {
+        "label": "poor",
+        "score": 0.0,
+        "band": {
+          "min": 0,
+          "max": 40
+        },
+        "in_band": true
+      }
+    },
+    {
+      "case_id": "ml_poor",
+      "passed": true,
+      "detail": {
+        "label": "poor",
+        "score": 0.0,
+        "band": {
+          "min": 0,
+          "max": 40
+        },
+        "in_band": true
+      }
+    }
+  ]
+}
